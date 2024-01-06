@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { Text, TextInput, Image, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import logo from '../../assets/ananth.png';
@@ -6,7 +6,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-function LoginScreen({navigation}) {
+function LoginScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -16,11 +16,31 @@ function LoginScreen({navigation}) {
         setShowPassword(!showPassword);
     };
 
-    const signInHandler = () => {
+    const loginApiPost = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (emailRegex.test(email) && password.length >= 6) {
-            navigation.navigate("Appointment")
+            try {
+                const response = await fetch("https://reqres.in/api/login", {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                const result = await response.json();
+                if (result.error) {
+                    Alert.alert(result.error);
+                } else {
+                    Alert.alert(" Token from api ", result.token);
+                    await navigation.navigate("Appointment");
+                }
+            } catch (error) {
+                console.log(" catch error ", error);
+            }
         } else {
             Alert.alert(" Please enter valid data.")
         }
@@ -83,7 +103,7 @@ function LoginScreen({navigation}) {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => signInHandler()}
+                        onPress={loginApiPost}
                         style={styles.signInButton}
                     >
                         <Text style={styles.signInButtonText}>
