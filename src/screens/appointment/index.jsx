@@ -45,7 +45,7 @@ function AppointmentScreen({ navigation }) {
 
     return (
         <>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <LinearGradient colors={['#DFC6FD', '#70578E', '#3C3153']} style={styles.container}>
                     <View style={styles.logoContainer}>
                         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -172,15 +172,13 @@ function AppointmentScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{ paddingBottom: 15 }}>
+                    <View style={{ paddingBottom: 20 }}>
                         <View style={styles.bottomView}>
                             {images.map((item) => (
-                                <>
-                                    <View style={{ flexDirection: 'column', alignItems: 'center' }} key={item.id}>
-                                        <Image source={item.icon} style={{ width: 30, height: 30 }} />
-                                        {item.icon === counselling && <Text style={{ color: '#E8CDEC' }}>Counselling</Text>}
-                                    </View>
-                                </>
+                                <View style={{ flexDirection: 'column', alignItems: 'center' }} key={item.id}>
+                                    <Image source={item.icon} style={{ width: 30, height: 30 }} />
+                                    {item.icon === counselling && <Text style={{ color: '#E8CDEC' }}>Counselling</Text>}
+                                </View>
                             ))}
                         </View>
                     </View>
